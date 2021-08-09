@@ -1,6 +1,6 @@
 import { Allow } from "class-validator";
 
-export class FindFilterDto {
+export class CategoryFilterDto {
 
     @Allow()
     id:string[];

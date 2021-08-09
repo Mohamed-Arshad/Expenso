@@ -1,5 +1,6 @@
-import { HttpService, Injectable } from '@nestjs/common';
+import { HttpService, Injectable, NotFoundException } from '@nestjs/common';
 import { AddCategoryDto } from '../DTO/addCategory.dto';
+import { CategoryFilterDto } from '../DTO/categoryFilter.dto';
 import { ChangeLimitDto } from '../DTO/changeLimit.dto';
 import { ExpenseDto } from '../DTO/expense.dto';
 import { ExpenseAmountDto} from '../DTO/expenseAmount.dto';
@@ -41,9 +42,19 @@ export class CategoriesService {
         return await this.categoryRepository.findById(id);
     }
 
+    async getCategoryByFilters(filter:CategoryFilterDto):Promise<Category[]>{
+        return await this.categoryRepository.findByFilters(filter);
+    }
+
     async viewExpenses(id:string):Promise<any>{
         const {Expenses}=await this.getCategoryById(id);
-        let url="http://localhost:3000/expenses?"+Expenses.map((id)=>{return "id="+id}).join('&');
+        let url="http://localhost:3000/expenses?";
+        //validation for if null && if array has only one element
+        if(Expenses.length==0){
+            return new NotFoundException(`No expenses Found in ${id}`);
+        }else{
+            url+=Expenses.map((id)=>{return "id="+id}).join('&');
+        }
         return await this.httpService.get(url).toPromise().then(res=>{
             return res.data;
         });
@@ -68,5 +79,9 @@ export class CategoriesService {
         }
         status.Status="Not Exceeded";
         return status;
+    }
+
+    async deleteCategoryById(id:string):Promise<Category>{
+        return this.categoryRepository.deleteById(id);
     }
 }

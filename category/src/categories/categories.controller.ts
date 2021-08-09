@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { AddCategoryDto } from './DTO/addCategory.dto';
+import { CategoryFilterDto } from './DTO/categoryFilter.dto';
 import { ChangeLimitDto } from './DTO/changeLimit.dto';
 import { ExpenseDto } from './DTO/expense.dto';
 import { ExpenseAmountDto } from './DTO/expenseAmount.dto';
@@ -33,7 +34,10 @@ export class CategoriesController {
         return await this.categoryService.moveExpense(from,to,moveExpenseDto);
     }
     @Get()
-    async viewCategory():Promise<Category[]>{
+    async viewCategory(@Query() filter:CategoryFilterDto):Promise<Category[]>{
+        if (Object.keys(filter).length){
+            return await this.categoryService.getCategoryByFilters(filter);
+        }
         return await this.categoryService.getAllCategory();
     }
     @Get('/:id')
@@ -51,5 +55,9 @@ export class CategoriesController {
     @Get('/GetExpenseStatus/:id')
     async GetExpenseStatus(@Param('id') id:string):Promise<ExpenseStatusDto>{
         return await this.categoryService.findExpenseStatus(id);
+    }
+    @Delete()
+    async deleteCategoryById(@Param('id') id:string):Promise<Category>{
+        return await this.categoryService.deleteCategoryById(id);
     }
 }

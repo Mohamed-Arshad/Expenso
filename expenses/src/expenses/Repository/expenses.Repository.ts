@@ -30,10 +30,15 @@ export class ExpensesRepository {
 
     async findWithFilters({id}:FindFilterDto):Promise<Expense[]>{
         let expenses:Expense[]=[];
+        
+        //if 1 element came (one element means not array.. so below we created an array)
+        if(!Array.isArray(id)){
+            id=[id];
+        }
         for(let i=0;i<id.length;i++){
             expenses.push(await this.findById(id[i]));
         }
-        return await expenses;
+        return expenses;
     }
 
     async deleteById(id:string):Promise<Expense>{

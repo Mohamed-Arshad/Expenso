@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AddCategoryDto } from '../DTO/addCategory.dto';
+import { CategoryFilterDto } from '../DTO/categoryFilter.dto';
 import { ChangeLimitDto } from '../DTO/changeLimit.dto';
 import { ExpenseDto } from '../DTO/expense.dto';
 import { Category, CategoryDocument } from '../schemas/categories.schema';
@@ -39,5 +40,17 @@ export class CategoriesRepository {
     
     async findById(id:string):Promise<Category>{
         return await this.categoryModel.findById(id);
+    }
+
+    async findByFilters({id}:CategoryFilterDto):Promise<Category[]>{
+        let category:Category[]=[];
+        for(let i=0;i<id.length;i++){
+            category.push(await this.findById(id[i]));
+        }
+        return await category;
+    }
+
+    async deleteById(id:string):Promise<Category>{
+        return await this.categoryModel.findByIdAndDelete(id);
     }
 }

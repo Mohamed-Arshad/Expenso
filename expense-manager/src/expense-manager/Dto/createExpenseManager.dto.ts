@@ -1,19 +1,16 @@
 import { Type } from "class-transformer";
 import { IsDate, IsNotEmpty, IsNumber } from "class-validator";
 
-export class AddExpensesDto {
+export class createExpenseManagerDto{
     @IsNotEmpty()
     ProfileId: string;
 
     @IsNotEmpty()
-    Description: string;
-
-    @IsNotEmpty()
     @IsNumber()
-    Amount: number;
+    MaxAmountLimit: number;
 
     @IsNotEmpty()
     @Type(() => Date)
     @IsDate()
-    Time: Date;
+    CreatedDate: Date;
 }
