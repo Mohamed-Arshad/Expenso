@@ -6,6 +6,7 @@ class ExpenseManagerApi extends RESTDataSource {
         this.baseURL = 'http://localhost:3200/expense-manager/';
     }
 
+    //Get
     async getExpenseManagerByid(id) {
         return await this.get(`${id}`);
     }
@@ -26,6 +27,14 @@ class ExpenseManagerApi extends RESTDataSource {
     async viewStatus(id){
         const Res=await this.get(`/viewStatus/${id}`);
         return Res.Status;
+    }
+
+    //Put
+    async changeMaxLimit(args){
+        return await this.put(
+            `/changeLimit/${args.input.id}`, // path
+            JSON.parse(JSON.stringify(args.input)), // request body
+          );
     }
 }
 

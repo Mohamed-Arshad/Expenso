@@ -17,7 +17,7 @@ export class CategoriesService {
         return await this.categoryRepository.add(addCategoryDto);
     }
 
-    async changeLimit(id:string, changeLimitDto:ChangeLimitDto):Promise<Category>{
+    async changeLimit(id:string,changeLimitDto:ChangeLimitDto):Promise<Category>{
         return await this.categoryRepository.changeLimit(id,changeLimitDto);
     }
 
