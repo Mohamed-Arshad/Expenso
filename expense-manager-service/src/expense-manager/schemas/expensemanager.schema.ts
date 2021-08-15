@@ -4,6 +4,7 @@ export type ExpenseManagerDocument = ExpenseManager & Document;
 
 @Schema()
 export class ExpenseManager {
+  _id:string;
   @Prop({ required: true })
   ProfileId: string;
   
